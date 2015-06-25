@@ -1,15 +1,15 @@
-var objects = [];
 
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+
+var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 camera.position.x = 0
-camera.position.y = 300
-camera.position.z = 1000
+camera.position.y = 0
+camera.position.z = 1750
 
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2()
 
-var renderer = new THREE.CanvasRenderer();
+var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor( 0xf0f0f0);
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -18,9 +18,11 @@ document.body.appendChild( renderer.domElement );
 var controls = new THREE.OrbitControls( camera );
 
 var geometry = new THREE.BoxGeometry( 10000, 10000, 1 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffffff, opacity: 0} );
+var material = new THREE.MeshBasicMaterial( {color: 0x00ff00, opacity: 0} );
 var wall = new THREE.Mesh(geometry, material )
 scene.add( wall )
+
+rotationParamsArray = []
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -58,42 +60,46 @@ function onDocumentMouseDown( event ) {
 
   if ( intersects.length > 0 ) {
 
-
-  var geometry = new THREE.CylinderGeometry(100, 100, 247.49, 50, 50, false)
-  var material = new THREE.MeshBasicMaterial( {color: 0xd3d3d3} );
+  var geometry = new THREE.CylinderGeometry(75, 75, 150, 70, 5, false)
+  var material = new THREE.MeshBasicMaterial( {color: 0xd3d3d3, wireframe: true} );
   var marmite = new THREE.Mesh(geometry, material )
   var cylinderEdges = new THREE.EdgesHelper( marmite, 0xffffff);
   marmite.material.color.setHex( Math.random() * 0xffffff );
   marmite.position.copy(intersects[ 0 ].point )
-  marmite.scale = .5
-  scene.add( marmite, cylinderEdges );
+  marmite.position.z += getRandomNumber(100, 1200)
+
+  marmites.push( marmite )
+
+  rotationParamsArray.push([
+    getRandomNumber(0.005, 0.0001),
+    getRandomNumber(0.005, 0.0001),
+    getRandomNumber(0.005, 0.0001)
+    ])
+
+  scene.add( marmite );
 
   }
+}
 
-
-
-  // var intersects = raycaster.intersectObjects( objects );
-
-  // if ( intersects.length > 0 ) {
-
-
-  //   var particle = new THREE.Sprite( particleMaterial );
-  //   particle.position.copy( intersects[ 0 ].point );
-  //   particle.scale.x = particle.scale.y = 16;
-  //   scene.add( particle );
-
-  }
+var marmites = []
 
 function render() {
   requestAnimationFrame( render );
 
-  // cube.rotation.x += 0.1;
-  // cube.rotation.y += 0.1;
+  for ( var i = 0; i < marmites.length; i++){
+    // console.log(marmites[i])
+    marmites[i].rotation.x = Date.now() * rotationParamsArray[i][0];
+    marmites[i].rotation.y = Date.now() * rotationParamsArray[i][1];
+    marmites[i].rotation.z = Date.now() * rotationParamsArray[i][2];
+  }
 
   renderer.render( scene, camera );
 }
 render();
 
+function getRandomNumber(min, max) {
+   return Math.random() * (max - min) + min;
+}
 
 
 
