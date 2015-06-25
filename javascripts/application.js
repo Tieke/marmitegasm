@@ -24,7 +24,8 @@ var material = new THREE.MeshBasicMaterial( {color: 0x00ff00, opacity: 0, shadin
 var wall = new THREE.Mesh(geometry, material )
 scene.add( wall )
 
-rotationParamsArray = []
+var rotationParamsArray = []
+var motionParamsArray = []
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -83,6 +84,17 @@ function onDocumentMouseDown( event ) {
     getRandomNumber(0.005, 0.0001)
     ])
 
+
+// START NEW SEGMENT
+  motionParamsArray.push([
+    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
+    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
+    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)]
+    ])
+// END NEW SEGMENT
+
+
+
   scene.add( marmite );
 
   }
@@ -94,12 +106,17 @@ function render() {
   requestAnimationFrame( render );
 
   for ( var i = 0; i < marmites.length; i++){
-    // console.log(marmites[i])
     marmites[i].rotation.x = Date.now() * rotationParamsArray[i][0];
     marmites[i].rotation.y = Date.now() * rotationParamsArray[i][1];
     marmites[i].rotation.z = Date.now() * rotationParamsArray[i][2];
-  }
 
+
+// START NEW SEGMENT
+    marmites[i].position.x = Math.sin( Date.now() * motionParamsArray[i][0][0] ) * motionParamsArray[i][0][1];
+    marmites[i].position.y = Math.sin( Date.now() * motionParamsArray[i][1][0] ) * motionParamsArray[i][1][1];
+    marmites[i].position.z = Math.sin( Date.now() * motionParamsArray[i][2][0] ) * motionParamsArray[i][2][1];
+// END NEW SEGMENT
+  }
 
 
   renderer.render( scene, camera );
@@ -112,30 +129,3 @@ function getRandomNumber(min, max) {
 
 
 
-
-
-// $(document).on("click", function(e) {
-//   var xpos = e.pageX
-//   var ypos = e.pageY
-//   var geometry = new THREE.BoxGeometry( 50, 50, 50 );
-//   var material = new THREE.MeshBasicMaterial( {color: 0xd3d3d3} );
-//   var cube = new THREE.Mesh( geometry, material );
-//   var cubeEdges = new THREE.EdgesHelper( cube, 0xffffff);
-//   scene.add( cube, cubeEdges );
-//   cube.position.x = xpos
-//   cube.position.y = ypos
-//   // console.log(cube)
-//   console.log(e)
-//   // console.log("x: ", xpos, "y: ", ypos)
-//   // console.log(newCube(xpos, ypos))
-// });
-
-// var newCube = function(xpos, ypos) {
-//   var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-//   var material = new THREE.MeshBasicMaterial( {color: 0xd3d3d3} );
-//   var cube = new THREE.Mesh( geometry, material );
-//   var cubeEdges = new THREE.EdgesHelper( cube, 0xffffff);
-//   scene.add( cube, cubeEdges );
-//   cube.position.x = xpos
-//   cube.position.y = ypos
-// }
