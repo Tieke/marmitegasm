@@ -17,8 +17,10 @@ document.body.appendChild( renderer.domElement );
 
 var controls = new THREE.OrbitControls( camera );
 
-var geometry = new THREE.BoxGeometry( 10000, 10000, 1 );
-var material = new THREE.MeshBasicMaterial( {color: 0x00ff00, opacity: 0} );
+var geometry = new THREE.SphereGeometry( 2500, 80, 80 );
+var material = new THREE.MeshBasicMaterial( {color: 0x00ff00, opacity: 0, shading: THREE.FlatShading, side: THREE.DoubleSide} );
+// var geometry = new THREE.PlaneGeometry( 10000, 6000, 4, 4 );
+// var material = new THREE.MeshBasicMaterial( {color: 0x00ff00, opacity: 0} );
 var wall = new THREE.Mesh(geometry, material )
 scene.add( wall )
 
@@ -60,13 +62,18 @@ function onDocumentMouseDown( event ) {
 
   if ( intersects.length > 0 ) {
 
+  var map = THREE.ImageUtils.loadTexture('../images/marmitegasm_label.jpg');
   var geometry = new THREE.CylinderGeometry(75, 75, 150, 70, 5, false)
-  var material = new THREE.MeshBasicMaterial( {color: 0xd3d3d3, wireframe: true} );
+  var material = new THREE.MeshBasicMaterial( {map: map} );
   var marmite = new THREE.Mesh(geometry, material )
   var cylinderEdges = new THREE.EdgesHelper( marmite, 0xffffff);
-  marmite.material.color.setHex( Math.random() * 0xffffff );
+  // marmite.material.color.setHex( Math.random() * 0xffffff );
   marmite.position.copy(intersects[ 0 ].point )
   marmite.position.z += getRandomNumber(100, 1200)
+
+  map.wrapS = map.wrapT = THREE.RepeatWrapping;
+  map.repeat.set( 1, 1 );
+
 
   marmites.push( marmite )
 
@@ -92,6 +99,8 @@ function render() {
     marmites[i].rotation.y = Date.now() * rotationParamsArray[i][1];
     marmites[i].rotation.z = Date.now() * rotationParamsArray[i][2];
   }
+
+
 
   renderer.render( scene, camera );
 }
