@@ -62,7 +62,7 @@ function onDocumentMouseDown( event ) {
 
   if ( intersects.length > 0 ) {
 
-  var map = THREE.ImageUtils.loadTexture('../images/marmitegasm_label.jpg');
+  var map = THREE.ImageUtils.loadTexture('../images/marmitegasm_label2.jpg');
   var geometry = new THREE.CylinderGeometry(75, 75, 150, 70, 5, false)
   var material = new THREE.MeshBasicMaterial( {map: map} );
   var marmite = new THREE.Mesh(geometry, material )
