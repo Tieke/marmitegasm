@@ -3,32 +3,32 @@ var revolutionParamsArray = []
 
 var scene = new THREE.Scene();
 
-var light = new THREE.PointLight(0xEEEEEE);
-light.position.set(20, 0, 20);
-scene.add(light);
+// var light = new THREE.PointLight(0xEEEEEE);
+// light.position.set(20, 0, 20);
+// scene.add(light);
 
-// Load the background texture
-var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
-var backgroundMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry( 2, 2, 0 ),
-    new THREE.MeshBasicMaterial({
-        map: backgroundtexture
-    }));
+// // Load the background texture
+// var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
+// var backgroundMesh = new THREE.Mesh(
+//     new THREE.PlaneGeometry( 2, 2, 0 ),
+//     new THREE.MeshBasicMaterial({
+//         map: backgroundtexture
+//     }));
 
 
-  backgroundMesh .material.depthTest = false;
-  backgroundMesh .material.depthWrite = false;
+//   backgroundMesh .material.depthTest = false;
+//   backgroundMesh .material.depthWrite = false;
 
-  // Create your background scene
-  var backgroundScene = new THREE.Scene();
-  var backgroundCamera = new THREE.Camera();
-  backgroundScene .add(backgroundCamera );
-  backgroundScene .add(backgroundMesh );
+//   // Create your background scene
+//   var backgroundScene = new THREE.Scene();
+//   var backgroundCamera = new THREE.Camera();
+//   backgroundScene .add(backgroundCamera );
+//   backgroundScene .add(backgroundMesh );
 
 var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 1750
+camera.position.z = 2050
 
 var controls = new THREE.OrbitControls( camera );
 var raycaster = new THREE.Raycaster();
@@ -57,10 +57,10 @@ renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 container.appendChild( renderer.domElement );
 
-var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
+// var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
 var geometry = new THREE.SphereGeometry( 7000, 80, 80 );
-var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} );
-// var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true, side: THREE.DoubleSide} );
+// var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} );
+var material = new THREE.MeshBasicMaterial( {color: 0xffffff, transparent: true, side: THREE.DoubleSide} );
 var toast = new THREE.Mesh(geometry, material )
 scene.add( toast )
 
@@ -179,7 +179,7 @@ function render() {
 
   renderer.autoClear = false;
   renderer.clear();
-  renderer.render(backgroundScene , backgroundCamera );
+  // renderer.render(backgroundScene , backgroundCamera );
   renderer.render(scene, camera);
 }
 render();
