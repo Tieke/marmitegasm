@@ -65,6 +65,7 @@ var toast = new THREE.Mesh(geometry, material )
 scene.add( toast )
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+// document.addEventListener( 'mousedown', onDocumentMouseDownShift, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -136,10 +137,10 @@ function onDocumentMouseDown( event ) {
   material.vertexColors = THREE.FaceColors;
 
   marmite.position.copy(intersects[ 0 ].point )
-  marmite.position.z += getRandomNumber(550, 1200)
+  marmite.position.z += getRandomNumber(800, 1500)
   marmite.initialPosition = [marmite.position.x, marmite.position.y, marmite.position.z]
 
-  marmite.scale.set(3,3,3)
+  marmite.scale.set(2,2,2)
 
   rotationParams = []
   for (var i = 0; i < 3; i++) {
@@ -158,7 +159,17 @@ function onDocumentMouseDown( event ) {
   marmites.push( marmite ) //push marmite to an array for easy reference in the render function
   scene.add( marmite );
 
+  var intersects2 = raycaster.intersectObjects( marmites )
+
+
   }
+  if (intersects2.length > 0  ){
+  console.log(event)
+      intersected_marmite = intersects2[0].object
+
+    scene.remove(intersected_marmite);
+    scene.remove(marmite);
+  };
 }
 
 var marmites = []
@@ -188,6 +199,6 @@ function getRandomNumber(min, max) {
    return Math.random() * (max - min) + min;
 }
 
-// var audio = new Audio('../audio/danube.mp3');
-// audio.play();
+var audio = new Audio('../audio/danube.mp3');
+audio.play();
 
