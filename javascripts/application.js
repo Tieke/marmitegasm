@@ -57,9 +57,10 @@ renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 container.appendChild( renderer.domElement );
 
-var toastmap = THREE.ImageUtils.loadTexture('../images/toast1.jpg');
-var geometry = new THREE.SphereGeometry( 5000, 80, 80 );
-var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} ); //color: 0xffffff, side: THREE.DoubleSide, transparent: true
+var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
+var geometry = new THREE.SphereGeometry( 7000, 80, 80 );
+var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} );
+// var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true, side: THREE.DoubleSide} );
 var toast = new THREE.Mesh(geometry, material )
 scene.add( toast )
 
@@ -135,13 +136,10 @@ function onDocumentMouseDown( event ) {
   material.vertexColors = THREE.FaceColors;
 
   marmite.position.copy(intersects[ 0 ].point )
-  marmite.position.z += getRandomNumber(100, 1200)
+  marmite.position.z += getRandomNumber(550, 1200)
   marmite.initialPosition = [marmite.position.x, marmite.position.y, marmite.position.z]
-  console.log(marmite.initialPosition); // save the position where the object is born
 
-  // map.wrapS = map.wrapT = THREE.RepeatWrapping;
-  // map.repeat.set( 1, 1 );
-
+  marmite.scale.set(3,3,3)
 
   rotationParams = []
   for (var i = 0; i < 3; i++) {
