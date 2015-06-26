@@ -3,6 +3,28 @@ var revolutionParamsArray = []
 
 var scene = new THREE.Scene();
 
+var light = new THREE.PointLight(0xEEEEEE);
+light.position.set(20, 0, 20);
+scene.add(light);
+
+// Load the background texture
+var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
+var backgroundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2, 2, 0 ),
+    new THREE.MeshBasicMaterial({
+        map: backgroundtexture
+    }));
+
+
+  backgroundMesh .material.depthTest = false;
+  backgroundMesh .material.depthWrite = false;
+
+  // Create your background scene
+  var backgroundScene = new THREE.Scene();
+  var backgroundCamera = new THREE.Camera();
+  backgroundScene .add(backgroundCamera );
+  backgroundScene .add(backgroundMesh );
+
 var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 camera.position.x = 0
 camera.position.y = 0
@@ -13,16 +35,16 @@ var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2()
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setClearColor( 0xf0f0f0);
+renderer.setClearColor( 0xffffff);
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-
-var geometry = new THREE.SphereGeometry( 2500, 80, 80 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true} );
-var wall = new THREE.Mesh(geometry, material )
-scene.add( wall )
+var toastmap = THREE.ImageUtils.loadTexture('../images/toast1.jpg');
+var geometry = new THREE.SphereGeometry( 5000, 80, 80 );
+var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} ); //color: 0xffffff, side: THREE.DoubleSide, transparent: true
+var toast = new THREE.Mesh(geometry, material )
+scene.add( toast )
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -56,7 +78,7 @@ function onDocumentMouseDown( event ) {
 
   raycaster.setFromCamera( mouse, camera );
 
-  var intersects = raycaster.intersectObjects( [wall] );
+  var intersects = raycaster.intersectObjects( [toast] );
 
   if ( intersects.length > 0 ) {
 
@@ -134,7 +156,10 @@ function render() {
   }
 
 
-  renderer.render( scene, camera );
+  renderer.autoClear = false;
+  renderer.clear();
+  renderer.render(backgroundScene , backgroundCamera );
+  renderer.render(scene, camera);
 }
 render();
 
@@ -142,5 +167,6 @@ function getRandomNumber(min, max) {
    return Math.random() * (max - min) + min;
 }
 
-
+var audio = new Audio('../audio/danube.mp3');
+audio.play();
 
