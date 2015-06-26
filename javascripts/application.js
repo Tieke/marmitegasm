@@ -95,6 +95,8 @@ function onDocumentMouseDown( event ) {
 
   marmite.position.copy(intersects[ 0 ].point )
   marmite.position.z += getRandomNumber(100, 1200)
+  marmite.initialPosition = [marmite.position.x, marmite.position.y, marmite.position.z]
+  console.log(marmite.initialPosition); // save the position where the object is born
 
   // map.wrapS = map.wrapT = THREE.RepeatWrapping;
   // map.repeat.set( 1, 1 );
@@ -130,11 +132,10 @@ function render() {
       marmites[i].rotation.y = Date.now() * marmites[i].rotationParams[1];
       marmites[i].rotation.z = Date.now() * marmites[i].rotationParams[2];
 
-      marmites[i].position.x = Math.sin( Date.now() * marmites[i].revolutionParams[0][0] ) * marmites[i].revolutionParams[0][1];
-      marmites[i].position.y = Math.sin( Date.now() * marmites[i].revolutionParams[1][0] ) * marmites[i].revolutionParams[1][1];
-      marmites[i].position.z = Math.sin( Date.now() * marmites[i].revolutionParams[2][0] ) * marmites[i].revolutionParams[2][1];
+      marmites[i].position.x = Math.sin( Date.now() * marmites[i].revolutionParams[0][0] ) * marmites[i].revolutionParams[0][1] + marmites[i].initialPosition[0];
+      marmites[i].position.y = Math.sin( Date.now() * marmites[i].revolutionParams[1][0] ) * marmites[i].revolutionParams[1][1] + marmites[i].initialPosition[1];
+      marmites[i].position.z = Math.sin( Date.now() * marmites[i].revolutionParams[2][0] ) * marmites[i].revolutionParams[2][1] + marmites[i].initialPosition[2];
   }
-
 
   renderer.render( scene, camera );
 }
