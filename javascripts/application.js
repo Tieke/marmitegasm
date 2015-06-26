@@ -3,32 +3,33 @@ var revolutionParamsArray = []
 
 var scene = new THREE.Scene();
 
-var light = new THREE.PointLight(0xEEEEEE);
-light.position.set(20, 0, 20);
-scene.add(light);
 
-// Load the background texture
-var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
-var backgroundMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry( 2, 2, 0 ),
-    new THREE.MeshBasicMaterial({
-        map: backgroundtexture
-    }));
+//the commented code is for toast planet and universe backdrop
+// var light = new THREE.PointLight(0xEEEEEE);
+// light.position.set(20, 0, 20);
+// scene.add(light);
 
+// // Load the background texture
+// var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
+// var backgroundMesh = new THREE.Mesh(
+//     new THREE.PlaneGeometry( 2, 2, 0 ),
+//     new THREE.MeshBasicMaterial({
+//         map: backgroundtexture
+//     }));
 
-  backgroundMesh .material.depthTest = false;
-  backgroundMesh .material.depthWrite = false;
+//   backgroundMesh .material.depthTest = false;
+//   backgroundMesh .material.depthWrite = false;
 
-  // Create your background scene
-  var backgroundScene = new THREE.Scene();
-  var backgroundCamera = new THREE.Camera();
-  backgroundScene .add(backgroundCamera );
-  backgroundScene .add(backgroundMesh );
+//   // Create your background scene
+//   var backgroundScene = new THREE.Scene();
+//   var backgroundCamera = new THREE.Camera();
+//   backgroundScene .add(backgroundCamera );
+//   backgroundScene .add(backgroundMesh );
 
 var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 1750
+camera.position.z = 2050
 
 var controls = new THREE.OrbitControls( camera );
 var raycaster = new THREE.Raycaster();
@@ -57,14 +58,15 @@ renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 container.appendChild( renderer.domElement );
 
-var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
+// var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
 var geometry = new THREE.SphereGeometry( 7000, 80, 80 );
-var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} );
-// var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true, side: THREE.DoubleSide} );
+// var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} );
+var material = new THREE.MeshBasicMaterial( {color: 0xffffff, transparent: true, side: THREE.DoubleSide} );
 var toast = new THREE.Mesh(geometry, material )
 scene.add( toast )
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+// document.addEventListener( 'mousedown', onDocumentMouseDownShift, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -136,10 +138,10 @@ function onDocumentMouseDown( event ) {
   material.vertexColors = THREE.FaceColors;
 
   marmite.position.copy(intersects[ 0 ].point )
-  marmite.position.z += getRandomNumber(550, 1200)
+  marmite.position.z += getRandomNumber(800, 1500)
   marmite.initialPosition = [marmite.position.x, marmite.position.y, marmite.position.z]
 
-  marmite.scale.set(3,3,3)
+  marmite.scale.set(2,2,2)
 
   rotationParams = []
   for (var i = 0; i < 3; i++) {
@@ -158,7 +160,17 @@ function onDocumentMouseDown( event ) {
   marmites.push( marmite ) //push marmite to an array for easy reference in the render function
   scene.add( marmite );
 
+  var intersects2 = raycaster.intersectObjects( marmites )
+
+
   }
+  if (intersects2.length > 0  ){
+  console.log(event)
+      intersected_marmite = intersects2[0].object
+
+    scene.remove(intersected_marmite);
+    scene.remove(marmite);
+  };
 }
 
 var marmites = []
@@ -179,7 +191,7 @@ function render() {
 
   renderer.autoClear = false;
   renderer.clear();
-  renderer.render(backgroundScene , backgroundCamera );
+  // renderer.render(backgroundScene , backgroundCamera );
   renderer.render(scene, camera);
 }
 render();
@@ -188,6 +200,6 @@ function getRandomNumber(min, max) {
    return Math.random() * (max - min) + min;
 }
 
-// var audio = new Audio('../audio/danube.mp3');
-// audio.play();
+var audio = new Audio('../audio/danube.mp3');
+audio.play();
 
