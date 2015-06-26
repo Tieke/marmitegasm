@@ -14,8 +14,8 @@
 
       function init() {
 
-        container = document.createElement( 'div' );
-        document.body.appendChild( container );
+        // container = document.createElement( 'div' );
+        // document.body.appendChild( container );
 
         // var info = document.createElement( 'div' );
         // info.style.position = 'absolute';

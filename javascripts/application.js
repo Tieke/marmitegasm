@@ -12,11 +12,28 @@ var controls = new THREE.OrbitControls( camera );
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2()
 
+// --------------------------- navbar ---------------------------
+
+var container = document.createElement( 'div' );
+document.body.appendChild( container );
+
+var openNav = document.createElement( 'div' );
+openNav.class = 'open_nav'
+openNav.innerHTML = '<a class="open_nav">team marmite</a>';
+container.appendChild( openNav );
+
+var navjar = document.createElement('nav');
+navjar.style.textAlign = 'center';
+navjar.innerHTML = '<p><a href="https://github.com/SkwynethPaltrow" target="_blank">will</a></p><p><a href="https://github.com/hoanganhdinhtrinh" target="_blank">hoang</a></p><p><a href="https://github.com/kylesnowschwartz" target="_blank">kyle</a></p><p><a href="https://github.com/teaiheb" target="_blank">te aihe</a></p> <p class="close_nav">(close)</p>';
+document.body.appendChild( navjar )
+
+// ---------------------------------------------------------------
+
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor( 0xf0f0f0);
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+container.appendChild( renderer.domElement );
 
 
 var geometry = new THREE.SphereGeometry( 2500, 80, 80 );
@@ -27,6 +44,8 @@ scene.add( wall )
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 window.addEventListener( 'resize', onWindowResize, false );
+
+
 
 function onWindowResize() {
 
@@ -49,7 +68,7 @@ function onDocumentTouchStart( event ) {
 
 function onDocumentMouseDown( event ) {
 
-  event.preventDefault();
+  // event.preventDefault();
 
   mouse.x = ( event.clientX / renderer.domElement.width ) * 2 - 1;
   mouse.y = - ( event.clientY / renderer.domElement.height ) * 2 + 1;
@@ -141,6 +160,5 @@ render();
 function getRandomNumber(min, max) {
    return Math.random() * (max - min) + min;
 }
-
 
 
