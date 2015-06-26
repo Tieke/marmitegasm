@@ -99,20 +99,22 @@ function onDocumentMouseDown( event ) {
   // map.wrapS = map.wrapT = THREE.RepeatWrapping;
   // map.repeat.set( 1, 1 );
 
-  marmites.push( marmite )
 
-  rotationParamsArray.push([
-    getRandomNumber(0.005, 0.0001),
-    getRandomNumber(0.005, 0.0001),
-    getRandomNumber(0.005, 0.0001)
-    ])
+  rotationParams = []
+  for (var i = 0; i < 3; i++) {
+    rotationParams.push(getRandomNumber(0.003, 0.0001))
+  };
+  marmite.rotationParams = rotationParams // adding the rotation params to the marmite object
 
-  revolutionParamsArray.push([
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)]
-    ])
+  revolutionParams = []
+  for (var i = 0; i < 3; i++) {
+    // the first of the two `getRandom` assigns the speed of the movement, the 2nd is to assign how far the object will move on each oscilation
+    revolutionParams.push([getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)]);
+  };
+  marmite.revolutionParams = revolutionParams; // adding the movement to the marmite object
 
+
+  marmites.push( marmite ) //push marmite to an array for easy reference in the render function
   scene.add( marmite );
 
   }
@@ -124,13 +126,13 @@ function render() {
   requestAnimationFrame( render );
 
   for ( var i = 0; i < marmites.length; i++){
-    marmites[i].rotation.x = Date.now() * rotationParamsArray[i][0];
-    marmites[i].rotation.y = Date.now() * rotationParamsArray[i][1];
-    marmites[i].rotation.z = Date.now() * rotationParamsArray[i][2];
+      marmites[i].rotation.x = Date.now() * marmites[i].rotationParams[0];
+      marmites[i].rotation.y = Date.now() * marmites[i].rotationParams[1];
+      marmites[i].rotation.z = Date.now() * marmites[i].rotationParams[2];
 
-    marmites[i].position.x = Math.sin( Date.now() * revolutionParamsArray[i][0][0] ) * revolutionParamsArray[i][0][1];
-    marmites[i].position.y = Math.sin( Date.now() * revolutionParamsArray[i][1][0] ) * revolutionParamsArray[i][1][1];
-    marmites[i].position.z = Math.sin( Date.now() * revolutionParamsArray[i][2][0] ) * revolutionParamsArray[i][2][1];
+      marmites[i].position.x = Math.sin( Date.now() * marmites[i].revolutionParams[0][0] ) * marmites[i].revolutionParams[0][1];
+      marmites[i].position.y = Math.sin( Date.now() * marmites[i].revolutionParams[1][0] ) * marmites[i].revolutionParams[1][1];
+      marmites[i].position.z = Math.sin( Date.now() * marmites[i].revolutionParams[2][0] ) * marmites[i].revolutionParams[2][1];
   }
 
 
