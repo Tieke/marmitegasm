@@ -17,7 +17,7 @@ renderer.setClearColor( 0xf0f0f0);
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-
+var marmites = [];
 
 var geometry = new THREE.SphereGeometry( 2500, 80, 80 );
 var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true} );
@@ -95,7 +95,6 @@ function onDocumentMouseDown( event ) {
 
   marmite.position.copy(intersects[ 0 ].point )
   marmite.position.z += getRandomNumber(100, 1200)
-
   // map.wrapS = map.wrapT = THREE.RepeatWrapping;
   // map.repeat.set( 1, 1 );
 
@@ -115,10 +114,21 @@ function onDocumentMouseDown( event ) {
 
   scene.add( marmite );
 
+  var intersects2 = raycaster.intersectObjects( marmites )
+  if ( intersects2.length > 0  ){
+    // var intersects2 = intersects2 [ 0 ].point;
+    // console.log(intersects2[0].object)
+    intersected_marmite = intersects2[0].object
+
+    // var intersected_marmite =
+    scene.remove(intersected_marmite);
+    scene.remove(marmite);
+  };
+
   }
 }
 
-var marmites = []
+
 
 function render() {
   requestAnimationFrame( render );
