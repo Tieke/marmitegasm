@@ -3,6 +3,28 @@ var revolutionParamsArray = []
 
 var scene = new THREE.Scene();
 
+var light = new THREE.PointLight(0xEEEEEE);
+light.position.set(20, 0, 20);
+scene.add(light);
+
+// Load the background texture
+var backgroundtexture = THREE.ImageUtils.loadTexture( '../images/universe.jpg' );
+var backgroundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2, 2, 0 ),
+    new THREE.MeshBasicMaterial({
+        map: backgroundtexture
+    }));
+
+
+  backgroundMesh .material.depthTest = false;
+  backgroundMesh .material.depthWrite = false;
+
+  // Create your background scene
+  var backgroundScene = new THREE.Scene();
+  var backgroundCamera = new THREE.Camera();
+  backgroundScene .add(backgroundCamera );
+  backgroundScene .add(backgroundMesh );
+
 var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 camera.position.x = 0
 camera.position.y = 0
@@ -30,16 +52,16 @@ document.body.appendChild( navjar )
 // ---------------------------------------------------------------
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setClearColor( 0xf0f0f0);
+renderer.setClearColor( 0xffffff);
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 container.appendChild( renderer.domElement );
 
-
-var geometry = new THREE.SphereGeometry( 2500, 80, 80 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, transparent: true} );
-var wall = new THREE.Mesh(geometry, material )
-scene.add( wall )
+var toastmap = THREE.ImageUtils.loadTexture('../images/toast1.jpg');
+var geometry = new THREE.SphereGeometry( 5000, 80, 80 );
+var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} ); //color: 0xffffff, side: THREE.DoubleSide, transparent: true
+var toast = new THREE.Mesh(geometry, material )
+scene.add( toast )
 
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 document.addEventListener( 'touchstart', onDocumentTouchStart, false );
@@ -75,7 +97,7 @@ function onDocumentMouseDown( event ) {
 
   raycaster.setFromCamera( mouse, camera );
 
-  var intersects = raycaster.intersectObjects( [wall] );
+  var intersects = raycaster.intersectObjects( [toast] );
 
   if ( intersects.length > 0 ) {
 
@@ -114,24 +136,28 @@ function onDocumentMouseDown( event ) {
 
   marmite.position.copy(intersects[ 0 ].point )
   marmite.position.z += getRandomNumber(100, 1200)
+  marmite.initialPosition = [marmite.position.x, marmite.position.y, marmite.position.z]
+  console.log(marmite.initialPosition); // save the position where the object is born
 
   // map.wrapS = map.wrapT = THREE.RepeatWrapping;
   // map.repeat.set( 1, 1 );
 
-  marmites.push( marmite )
 
-  rotationParamsArray.push([
-    getRandomNumber(0.005, 0.0001),
-    getRandomNumber(0.005, 0.0001),
-    getRandomNumber(0.005, 0.0001)
-    ])
+  rotationParams = []
+  for (var i = 0; i < 3; i++) {
+    rotationParams.push(getRandomNumber(0.003, 0.0001))
+  };
+  marmite.rotationParams = rotationParams // adding the rotation params to the marmite object
 
-  revolutionParamsArray.push([
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)],
-    [getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)]
-    ])
+  revolutionParams = []
+  for (var i = 0; i < 3; i++) {
+    // the first of the two `getRandom` assigns the speed of the movement, the 2nd is to assign how far the object will move on each oscilation
+    revolutionParams.push([getRandomNumber(0.00009, 0.0003), getRandomNumber(500, 1000)]);
+  };
+  marmite.revolutionParams = revolutionParams; // adding the movement to the marmite object
 
+
+  marmites.push( marmite ) //push marmite to an array for easy reference in the render function
   scene.add( marmite );
 
   }
@@ -143,17 +169,20 @@ function render() {
   requestAnimationFrame( render );
 
   for ( var i = 0; i < marmites.length; i++){
-    marmites[i].rotation.x = Date.now() * rotationParamsArray[i][0];
-    marmites[i].rotation.y = Date.now() * rotationParamsArray[i][1];
-    marmites[i].rotation.z = Date.now() * rotationParamsArray[i][2];
+      marmites[i].rotation.x = Date.now() * marmites[i].rotationParams[0];
+      marmites[i].rotation.y = Date.now() * marmites[i].rotationParams[1];
+      marmites[i].rotation.z = Date.now() * marmites[i].rotationParams[2];
 
-    marmites[i].position.x = Math.sin( Date.now() * revolutionParamsArray[i][0][0] ) * revolutionParamsArray[i][0][1];
-    marmites[i].position.y = Math.sin( Date.now() * revolutionParamsArray[i][1][0] ) * revolutionParamsArray[i][1][1];
-    marmites[i].position.z = Math.sin( Date.now() * revolutionParamsArray[i][2][0] ) * revolutionParamsArray[i][2][1];
+      marmites[i].position.x = Math.sin( Date.now() * marmites[i].revolutionParams[0][0] ) * marmites[i].revolutionParams[0][1] + marmites[i].initialPosition[0];
+      marmites[i].position.y = Math.sin( Date.now() * marmites[i].revolutionParams[1][0] ) * marmites[i].revolutionParams[1][1] + marmites[i].initialPosition[1];
+      marmites[i].position.z = Math.sin( Date.now() * marmites[i].revolutionParams[2][0] ) * marmites[i].revolutionParams[2][1] + marmites[i].initialPosition[2];
   }
 
 
-  renderer.render( scene, camera );
+  renderer.autoClear = false;
+  renderer.clear();
+  renderer.render(backgroundScene , backgroundCamera );
+  renderer.render(scene, camera);
 }
 render();
 
@@ -161,4 +190,6 @@ function getRandomNumber(min, max) {
    return Math.random() * (max - min) + min;
 }
 
+// var audio = new Audio('../audio/danube.mp3');
+// audio.play();
 
