@@ -40,7 +40,7 @@ renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var toastmap = THREE.ImageUtils.loadTexture('../images/toast1.jpg');
+var toastmap = THREE.ImageUtils.loadTexture('../images/hi_res_toast.jpg');
 var geometry = new THREE.SphereGeometry( 5000, 80, 80 );
 var material = new THREE.MeshBasicMaterial( {map: toastmap, side: THREE.DoubleSide} ); //color: 0xffffff, side: THREE.DoubleSide, transparent: true
 var toast = new THREE.Mesh(geometry, material )
