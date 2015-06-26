@@ -3,6 +3,8 @@ var revolutionParamsArray = []
 
 var scene = new THREE.Scene();
 
+
+//the commented code is for toast planet and universe backdrop
 // var light = new THREE.PointLight(0xEEEEEE);
 // light.position.set(20, 0, 20);
 // scene.add(light);
@@ -14,7 +16,6 @@ var scene = new THREE.Scene();
 //     new THREE.MeshBasicMaterial({
 //         map: backgroundtexture
 //     }));
-
 
 //   backgroundMesh .material.depthTest = false;
 //   backgroundMesh .material.depthWrite = false;
