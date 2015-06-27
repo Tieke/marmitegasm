@@ -40,7 +40,7 @@ var mouse = new THREE.Vector2()
 var container = document.createElement( 'div' );
 document.body.appendChild( container );
 
-var openNav = document.createElement( 'div' );
+var openNav = document.createElement( 'p' );
 openNav.class = 'open_nav'
 openNav.innerHTML = '<a class="open_nav">team marmite</a>';
 container.appendChild( openNav );
